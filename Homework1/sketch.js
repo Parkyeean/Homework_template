@@ -103,16 +103,11 @@ function draw() {
     propellers[i].rotate();
   }
   //circle 그리기
-  if (frameCount % 18 == 0) {
+  if (frameCount % 20 == 0) {
     circles.push(new Circle(10, 10, 15, c_d));
   }
   for (let i = 0; i < circles.length; i++) {
     circles[i].show();
-    // if (circles[i].isOffScreen()) {
-    //   circles[i].removeFromWorld();
-    //   circles.splice(i, 1);
-    //   i--;
-    // }
   }
   //box 그리기
   if (frameCount % 20 == 10) {
@@ -120,11 +115,6 @@ function draw() {
   }
   for (let i = 0; i < boxes.length; i++) {
     boxes[i].show();
-    // if (boxes[i].isOffScreen()) {
-    //   boxes[i].removeFromWorld();
-    //   boxes.splice(i, 1);
-    //   i--;
-    // }
   }
 }
 
@@ -171,18 +161,12 @@ function Propeller(x, y, w, h, a) {
 function Circle(x, y, r, c_d) {
   this.col = color(random(150), 100, 100);
   let options = {
-    restitution: 0.9,
-    friction: 0.02,
+    restitution: 0.8,
+    friction: 0.03,
     density: c_d,
   };
   this.body = Bodies.circle(x, y, r, options);
   Composite.add(world, this.body);
-
-  //화면밖에 나가면 true 를 반환하는 메서드
-  this.isOffScreen = function () {
-    let pos = this.body.position;
-    return pos.x > width || pos.x < 0;
-  };
 
   //p5.js 에서 그리기
   this.show = function () {
@@ -205,12 +189,6 @@ function Box(x, y, r, b_d) {
   };
   this.body = Bodies.rectangle(x, y, r, r, options);
   Composite.add(world, this.body);
-
-  //화면밖에 나가면 true 를 반환하는 메서드
-  this.isOffScreen = function () {
-    let pos = this.body.position;
-    return pos.x > width || pos.x < 0;
-  };
 
   //p5.js 에서 그리기
   this.show = function () {
