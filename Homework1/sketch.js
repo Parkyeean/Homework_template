@@ -103,7 +103,7 @@ function draw() {
     propellers[i].rotate();
   }
   //circle 그리기
-  if (frameCount % 20 == 0) {
+  if (frameCount % 18 == 0) {
     circles.push(new Circle(10, 10, 15, c_d));
   }
   for (let i = 0; i < circles.length; i++) {
@@ -161,7 +161,7 @@ function Propeller(x, y, w, h, a) {
 function Circle(x, y, r, c_d) {
   this.col = color(random(120), 100, 100);
   let options = {
-    restitution: 0.8,
+    restitution: 0.9,
     friction: 0.03,
     density: c_d,
   };
