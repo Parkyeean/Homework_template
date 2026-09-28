@@ -79,7 +79,7 @@ function setup() {
 
 function draw() {
   background(255);
-  Engine.update(engine, 1000 / 55);
+  Engine.update(engine, 1000 / 60);
   engine.gravity.y = 1;
   //slope 그리기
   stroke(0);
@@ -161,8 +161,8 @@ function Propeller(x, y, w, h, a) {
 function Circle(x, y, r, c_d) {
   this.col = color(random(120), 100, 100);
   let options = {
-    restitution: 0.9,
-    friction: 0.03,
+    restitution: 0.85,
+    friction: 0.003,
     density: c_d,
   };
   this.body = Bodies.circle(x, y, r, options);
