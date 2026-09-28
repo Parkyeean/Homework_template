@@ -79,7 +79,7 @@ function setup() {
 
 function draw() {
   background(255);
-  Engine.update(engine, 1000 / 50);
+  Engine.update(engine, 1000 / 60);
   engine.gravity.y = 1;
   //slope 그리기
   stroke(0);
