@@ -159,7 +159,7 @@ function Propeller(x, y, w, h, a) {
 
 //Circle 생성자함수
 function Circle(x, y, r, c_d) {
-  this.col = color(random(150), 100, 100);
+  this.col = color(random(120), 100, 100);
   let options = {
     restitution: 0.8,
     friction: 0.03,
