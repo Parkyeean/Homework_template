@@ -161,8 +161,8 @@ function Propeller(x, y, w, h, a) {
 function Circle(x, y, r, c_d) {
   this.col = color(random(120), 100, 100);
   let options = {
-    restitution: 0.85,
-    friction: 0.003,
+    restitution: 0.8,
+    friction: 0.025,
     density: c_d,
   };
   this.body = Bodies.circle(x, y, r, options);
