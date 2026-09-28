@@ -103,14 +103,14 @@ function draw() {
     propellers[i].rotate();
   }
   //circle 그리기
-  if (frameCount % 18 == 0) {
+  if (frameCount % 20 == 0) {
     circles.push(new Circle(10, 10, 15, c_d));
   }
   for (let i = 0; i < circles.length; i++) {
     circles[i].show();
   }
   //box 그리기
-  if (frameCount % 20 == 10) {
+  if (frameCount % 22 == 10) {
     boxes.push(new Box(10, 10, 20, b_d));
   }
   for (let i = 0; i < boxes.length; i++) {
