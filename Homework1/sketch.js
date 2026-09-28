@@ -183,7 +183,7 @@ function Circle(x, y, r, c_d) {
 function Box(x, y, r, b_d) {
   this.col = color(random(180, 360), 10, 100);
   let options = {
-    restitution: 1.25,
+    restitution: 1.2,
     friction: 0.03,
     density: b_d,
   };
