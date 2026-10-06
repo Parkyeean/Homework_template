@@ -405,7 +405,8 @@ function mouseDragged() {
 // }
 
 function deleteConstraint(pressedBody) {
-  let h = find(pressedBody);
+  if(pressedBody){
+    let h = find(pressedBody);
 
   if (!h || h.index === 0) return;
   let targetIndex = h.index - 1;
@@ -415,4 +416,6 @@ function deleteConstraint(pressedBody) {
 
     Composite.remove(h.comp, targetConstraint);
   }
+  }
+  
 }
