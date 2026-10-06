@@ -405,17 +405,16 @@ function mouseDragged() {
 // }
 
 function deleteConstraint(pressedBody) {
-  if(pressedBody){
-    let h = find(pressedBody);
+  let h = find(pressedBody);
 
   if (!h || h.index === 0) return;
-  let targetIndex = h.index - 1;
-  let targetConstraint = h.comp.constraints[targetIndex];
-  if (targetConstraint) {
-    if (!targetConstraint) return;
+  if (typeof h === "object") {
+    let targetIndex = h.index - 1;
+    let targetConstraint = h.comp.constraints[targetIndex];
+    if (targetConstraint) {
+      if (!targetConstraint) return;
 
-    Composite.remove(h.comp, targetConstraint);
+      Composite.remove(h.comp, targetConstraint);
+    }
   }
-  }
-  
 }
