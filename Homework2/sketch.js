@@ -6,7 +6,7 @@ const MouseConstraint = Matter.MouseConstraint;
 const Mouse = Matter.Mouse;
 const Composites = Matter.Composites;
 const Constraint = Matter.Constraint;
-Matter.Common.setDecomp(decomp);
+// Matter.Common.setDecomp(decomp);
 //라인별 배열 정의
 let hairLine1 = [];
 let hairLine2 = [];
@@ -44,9 +44,9 @@ let pressedBody,
   img2,
   img3;
 //가위
-let svg;
-let path;
-let vertices;
+// let svg;
+// let path;
+// let vertices;
 let scissors;
 //
 let constraintBroken = false;
@@ -61,16 +61,16 @@ async function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
   let mouse = Mouse.create(canvas.elt);
   mouse.pixelRatio = pixelDensity();
-  // 이미지 in setup
-  img1 = await loadImage("interact.png");
-  img2 = await loadImage("interact-12.png");
-  img3 = await loadImage("interact-13.png");
-
   //크기조절
   // mouse.scale.x = 1 / 1.3;
   // mouse.scale.y = 1 / 1.3;
   mouseConstraint = MouseConstraint.create(engine, { mouse: mouse });
   Composite.add(world, mouseConstraint);
+
+  // 이미지 in setup
+  img1 = await loadImage("interact.png");
+  img2 = await loadImage("interact-12.png");
+  img3 = await loadImage("interact-13.png");
   //중심 정의
   center = {
     x: windowWidth / 2,
@@ -107,9 +107,7 @@ async function setup() {
       }
     }
   });
-  Matter.Events.on(mouseConstraint, "mousedown", function () {
-    Composite.remove(world, scissorsConstraint);
-  });
+
   //가위
   // let response = await fetch("interact.svg");
   // let text = await response.text();
@@ -120,9 +118,7 @@ async function setup() {
   // scissors = Bodies.fromVertices(300, 200, vertices, {
   //   frictionAir: 0,
   // });
-  scissors = Bodies.rectangle(width * 0.77, height * 0.45, 40, 70, {
-    frictionAir: 0,
-  });
+  scissors = Bodies.rectangle(width * 0.77, height * 0.45, 40, 70);
   Composite.add(world, scissors);
   let scissorsConstraint = Constraint.create({
     bodyA: scissors,
@@ -132,26 +128,17 @@ async function setup() {
     },
     stiffness: 1,
   });
-
   Composite.add(world, scissorsConstraint);
-  //가위 constraint
-  // let sc = Constraint.create({
-  //   bodyA: scissors,
-  //   pointB: { x: 500, y: 500 },
-  //   length: 100,
-  //   stiffness: 0,
-  // });
-  // Composite.add(world, sc);
+  Matter.Events.on(mouseConstraint, "mousedown", function () {
+    if (mouseConstraint.body === scissors) {
+      Composite.remove(world, scissorsConstraint);
+    }
+  });
 }
 function draw() {
   Engine.update(engine);
   engine.gravity.y = 1;
   background(255);
-  // 이미지 in draw
-  // if (img1) {
-  //   image(img1, 0, 0, img1.width * 0.7, img1.height * 0.7);
-  // }
-
   //크기조절
   // push();
   // translate(width / 2, height / 2);
@@ -199,10 +186,7 @@ function draw() {
 
   showLine(hair8);
   showBall(hair8.array);
-  // showBall(hair9.array);
-  // showLine(hair9.array);
-  // showBall(hair10.array);
-  // showLine(hair10.array);
+
   // pop();
 
   push();
@@ -212,23 +196,11 @@ function draw() {
   imageMode(CENTER);
   image(img1, 0, 0);
   pop();
-  // push();
-  let img13X = width * 0.2;
-  let img13Y = height * 0.458;
-  let img13W = width * 0.22;
-  let img13H = height * 0.035;
-
-  // 오른쪽 이미지 (가위 & 설명 카드 박스)
-  let img12X = width * 0.67;
-  let img12Y = height * 0.388;
-  let img12W = width * 0.104;
-  let img12H = height * 0.248;
-
-  // draw() 사용 예시
+  // 2가 오른쪽, 3이 왼쪽
   imageMode(CENTER);
   image(img2, width * 0.77, height * 0.47, img2.width * 0.9, img2.height * 0.9);
   imageMode(CORNER);
-  image(img3, img13X, img13Y, img3.width * 0.8, img3.height * 0.8);
+  image(img3, width * 0.2, height * 0.458, img3.width * 0.8, img3.height * 0.8);
   // pop();
 }
 
@@ -282,6 +254,12 @@ function HairBall(x, y, r, fixed, comp) {
     // circle(0, 0, this.r * (1 / 3.5));
     pop();
   };
+  this.checkif = function () {
+    if (this.body.position.y > height) {
+      // Compositite.remove(comp, this.body);
+      // obj.array = obj.array.filter((x) => x != this.body);
+    }
+  };
 }
 
 function showLine(obj) {
@@ -314,6 +292,7 @@ function showLine(obj) {
 function showBall(obj) {
   for (let i = 1; i < obj.length; i++) {
     obj[i].show();
+    // obj[i].checkif();
   }
 }
 
@@ -343,25 +322,30 @@ function defaultSetting(angle, xSpace, ySpace, length, r, comp, objArray) {
 function rremove(body) {
   //배열찾기;
   let target = find(body);
-  //배열에서 제거
-  if (target) {
-    let k = target.array;
-    for (let i = 0; i < k.length; i++) {
-      if (k[i].body === body) {
-        Composite.remove(
-          target.comp,
-          target.obj.comp.constraints[target.index - 1],
-        );
-        k.splice(i, 1);
-        break;
-      }
-    }
-  } else {
-    return;
+  let k = target.array;
+  Composite.remove(world, body);
+  for (let p of k) {
+    k = k.filter((x) => x != body);
   }
+  //배열에서 제거
+  // if (target) {
+  //   let k = target.array;
+  //   for (let i = 0; i < k.length; i++) {
+  //     if (k[i].body === body) {
+  //       Composite.remove(
+  //         target.comp,
+  //         target.obj.comp.constraints[target.index - 1],
+  //       );
+  //       k.splice(i, 1);
+  //       break;
+  //     }
+  //   }
+  // } else {
+  //   return;
+  // }
 
-  Composite.remove(target.comp, body);
-  // Composite.remove(world, body);
+  // Composite.remove(target.comp, body);
+  // // Composite.remove(world, body);
 }
 
 function find(body) {
@@ -383,6 +367,7 @@ function mouseReleased() {
     let d = dist(pressX, pressY, releaseX, releaseY);
     if (d < 5) {
       rremove(pressedBody);
+      deleteConstraint(pressedBody);
       // } else {
       //   if (d > 10) {
       //     deleteConstraint(pressedBody);
