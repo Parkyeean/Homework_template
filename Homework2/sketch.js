@@ -104,6 +104,11 @@ async function setup() {
       if (pair.bodyA.id === scissors.id || pair.bodyB.id === scissors.id) {
         let otherBody = bodyA === scissors ? bodyB : bodyA;
         if (otherBody) {
+          // console.log(otherBody);
+          // let f = find(otherBody);
+          // f.array = f.array.filter((x) => x != otherBody);
+          // Composite.remove(f.comp, otherBody);
+          // Composite.remove(world, otherBody);
           deleteConstraint(otherBody);
         }
       }
@@ -389,12 +394,25 @@ function mouseDragged() {
   }
 }
 
+// function deleteConstraint(pressedBody) {
+//   let h = find(pressedBody);
+//   if (!h || h.index === 0) return;
+//   let targetIndex = h.index - 1;
+//   let targetObj = h.obj;
+//   let targetConstraint = targetObj.comp.constraints[targetIndex];
+//   Composite.remove(h.comp, targetConstraint);
+//   Composite.remove(world, targetConstraint);
+// }
+
 function deleteConstraint(pressedBody) {
   let h = find(pressedBody);
+
   if (!h || h.index === 0) return;
+
   let targetIndex = h.index - 1;
-  let targetObj = h.obj;
-  let targetConstraint = targetObj.comp.constraints[targetIndex];
+  let targetConstraint = h.comp.constraints[targetIndex];
+
+  if (!targetConstraint) return;
+
   Composite.remove(h.comp, targetConstraint);
-  Composite.remove(world, targetConstraint);
 }
