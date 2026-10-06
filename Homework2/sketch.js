@@ -103,7 +103,9 @@ async function setup() {
       let bodyB = pair.bodyB;
       if (pair.bodyA.id === scissors.id || pair.bodyB.id === scissors.id) {
         let otherBody = bodyA === scissors ? bodyB : bodyA;
-        deleteConstraint(otherBody);
+        if (otherBody) {
+          deleteConstraint(otherBody);
+        }
       }
     }
   });
