@@ -816,6 +816,14 @@
     });
     angleMode(DEGREES);
     textFont("sans-serif");
+    // 마우스를 사용하는 넓은 가로 화면에서만 원의 최대 크기를 조금 확대
+    let laptopLayout =
+      width >= 900 &&
+      width > height &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: fine)").matches;
+    sizeCaps.base = laptopLayout ? 600 : 520;
+    sizeCaps.overviewDiameter = laptopLayout ? 720 : 640;
     base = min(width, height, sizeCaps.base);
     cx = width * 0.495; // 시각적 균형을 위해 화면 중앙에서 0.5% 왼쪽으로 보정
     cy = height / 2;
