@@ -1159,7 +1159,7 @@
       availableWidth / shapeExtent,
     );
     let centerRadius = r * scale * layerCenterScale;
-    return {
+    let dock = {
       x: isRight(area)
         ? width * layerSideMarginRatio + centerRadius
         : width * (1 - layerSideMarginRatio) - centerRadius,
@@ -1169,6 +1169,16 @@
         : height * (1 - layerVerticalMarginRatio) - centerRadius,
       scale,
     };
+    // 아이폰은 가로·세로 회전 모두 기존 배치를 유지. 큰 화면만 그룹 전체를 중앙 쪽으로 보정
+    if (min(width, height) >= 600) {
+      let outerRadius = r * scale * layerScales[3];
+      let offset = (outerRadius - centerRadius) / 2;
+      let centeredX = width / 2 - (isRight(area) ? 1 : -1) * offset;
+      let centeredY = height / 2 - (isBelow(area) ? 1 : -1) * offset;
+      dock.x = lerp(dock.x, centeredX, 0.3);
+      dock.y = lerp(dock.y, centeredY, 0.3);
+    }
+    return dock;
   }
 
   function updateAnimations() {
